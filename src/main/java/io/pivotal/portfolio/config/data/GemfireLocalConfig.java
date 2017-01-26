@@ -39,7 +39,7 @@ public class GemfireLocalConfig {
 		LocalRegionFactoryBean<String, Order> orderRegion = new LocalRegionFactoryBean<>();
 		orderRegion.setCache(cache);
 		orderRegion.setClose(false);
-		orderRegion.setName("Portfolio");
+		orderRegion.setName("Order");
 		orderRegion.setPersistent(false);
 		return orderRegion;
 	}

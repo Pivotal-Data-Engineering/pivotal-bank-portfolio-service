@@ -30,7 +30,7 @@ public class GemfireCloudConfig extends AbstractCloudConfig {
 	ClientRegionFactoryBean<String, Order> accountRegion(final ClientCache cache) {
 		ClientRegionFactoryBean<String, Order> accountRegion = new ClientRegionFactoryBean<>();
 		accountRegion.setCache(cache);
-		accountRegion.setName("Portfolio");
+		accountRegion.setName("Order");
 		accountRegion.setShortcut(ClientRegionShortcut.PROXY);
 		return accountRegion;
 	}

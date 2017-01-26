@@ -26,7 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "ORDERS")
-@Region("Portfolio")
+@Region("Order")
 public class Order {
 	public static BigDecimal DEFAULT_ORDER_FEE = new BigDecimal(10.50);
 
