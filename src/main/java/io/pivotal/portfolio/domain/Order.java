@@ -14,6 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.gemfire.mapping.Region;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -24,13 +26,16 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "ORDERS")
+@Region("Portfolio")
 public class Order {
 	public static BigDecimal DEFAULT_ORDER_FEE = new BigDecimal(10.50);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@org.springframework.data.annotation.Id
+	@GeneratedValue(generator="system-uuid")
+	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	@Column(name = "orderid")
-	private Integer orderId;
+	private String orderId;
 	
 	@Column(name = "userid")
 	@NotNull
@@ -69,11 +74,11 @@ public class Order {
 	@NotNull
 	private String currency;
 
-	public Integer getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(Integer orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 

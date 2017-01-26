@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.pivotal.portfolio.repository.IdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,10 @@ public class PortfolioService {
 	QuoteRemoteCallService quoteService;
 
 	@Autowired
-	@LoadBalanced
 	private RestTemplate restTemplate;
+
+	@Autowired
+	IdGenerator idGenerator;
 
 	// @Value("${pivotal.quotesService.name}")
 	// protected String quotesService;
@@ -148,6 +151,7 @@ public class PortfolioService {
 	@Transactional
 	public Order addOrder(Order order) {
 		logger.debug("Adding order: " + order);
+		order.setOrderId(idGenerator.getNextId());
 		if (order.getOrderFee() == null) {
 			order.setOrderFee(Order.DEFAULT_ORDER_FEE);
 			logger.debug("Adding Fee to order: " + order);
