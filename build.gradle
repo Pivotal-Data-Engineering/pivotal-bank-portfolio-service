@@ -28,98 +28,98 @@ repositories {
 }
 
 // Apply versioning to all projects from versioning script.
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply from: "$projectDir/gradle/versioning.gradle"
-apply plugin: 'eclipse'
-apply plugin: 'spring-boot'
-apply plugin: "io.spring.dependency-management"
-apply plugin: "com.gorylenko.gradle-git-properties"
+	apply plugin: 'java'
+	apply plugin: 'jacoco'
+	apply from: "$projectDir/gradle/versioning.gradle"
+	apply plugin: 'eclipse'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: "io.spring.dependency-management"
+	apply plugin: "com.gorylenko.gradle-git-properties"
 
-println version
+	println version
 
-test { finalizedBy jacocoTestReport }
+	test { finalizedBy jacocoTestReport }
 
-task manifestFilter(type: Copy) {
-	from 'manifest-unversioned.yml'
-	into "${buildDir}/"
-	rename { String fileName ->
-		fileName.replace('-unversioned', '')
+	task manifestFilter(type: Copy) {
+		from 'manifest-unversioned.yml'
+		into "${buildDir}/"
+		rename { String fileName ->
+			fileName.replace('-unversioned', '')
+		}
+		expand(version: "${version}")
 	}
-	expand(version: "${version}")
-}
 
-assemble { finalizedBy manifestFilter }
+	assemble { finalizedBy manifestFilter }
 
-jacocoTestReport {
-	group = "Reporting"
-	description = "Generate Jacoco coverage reports after running tests."
-	reports {
+	jacocoTestReport {
+		group = "Reporting"
+		description = "Generate Jacoco coverage reports after running tests."
+		reports {
 
-		csv.enabled false
+			csv.enabled false
 
-		html{
-			enabled true
-			destination "${buildDir}/reports/jacoco"
+			html{
+				enabled true
+				destination "${buildDir}/reports/jacoco"
+			}
+
+			xml.enabled false
 		}
 
-		xml.enabled false
+		additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
 	}
 
-	additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-}
 
-
-jacoco { toolVersion = "0.7.5+" //	reportsDir = file("$buildDir/customJacocoReportDir")
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-repositories {
-	mavenCentral()
-	maven { url "http://repo.spring.io/release" }
-	maven { url "http://repo.spring.io/libs-release" }
-	maven { url "http://repo.spring.io/milestone" }
-	maven { url "http://repo.spring.io/snapshot" }
-}
-
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudStarterParentTrain}"
-		mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:${scsVersion}"
+	jacoco { toolVersion = "0.7.5+" //	reportsDir = file("$buildDir/customJacocoReportDir")
 	}
-}
-dependencies {
 
-	// shared dependencies for all services
-	compile "org.springframework.boot:spring-boot-starter-web"
-	compile "org.springframework.boot:spring-boot-starter-actuator"
-	compile "org.springframework.cloud:spring-cloud-starter-sleuth"
-	compile "io.pivotal.spring.cloud:spring-cloud-services-starter-config-client"
-	compile "io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry"
-	compile "io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker"
-	compile "org.springframework.boot:spring-boot-starter-data-jpa"
-	compile "io.pivotal.spring.cloud:spring-cloud-gemfire-connector-core:1.0.0.RELEASE"
-	compile "io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE"
-	compile "io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE"
-	compile 'org.springframework.data:spring-data-gemfire:1.8.6.RELEASE'
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
-	//test packages
-	testCompile "org.springframework.boot:spring-boot-starter-test"
-	testCompile "junit:junit:$junitVersion"
-	testRuntime "com.jayway.jsonpath:json-path"
-	testRuntime "org.hsqldb:hsqldb"
-	//runtime
-	runtime "org.hsqldb:hsqldb"
+	repositories {
+		mavenCentral()
+		maven { url "http://repo.spring.io/release" }
+		maven { url "http://repo.spring.io/libs-release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "http://repo.spring.io/snapshot" }
+	}
 
-}
-// process substitutions in yml files.
-processResources {
-	filesMatching("**/*.yml") { expand(project.properties) }
-}
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudStarterParentTrain}"
+			mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:${scsVersion}"
+		}
+	}
+	dependencies {
 
-jar { baseName = 'portfolio' }
-description = "Micro-service to manage portfolios"
+		// shared dependencies for all services
+		compile "org.springframework.boot:spring-boot-starter-web"
+		compile "org.springframework.boot:spring-boot-starter-actuator"
+		compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+		compile "io.pivotal.spring.cloud:spring-cloud-services-starter-config-client"
+		compile "io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry"
+		compile "io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker"
+		compile "org.springframework.boot:spring-boot-starter-data-jpa"
+		compile "io.pivotal.spring.cloud:spring-cloud-gemfire-connector-core:1.0.0.RELEASE"
+		compile "io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE"
+		compile "io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE"
+		compile 'org.springframework.data:spring-data-gemfire:1.8.6.RELEASE'
+
+		//test packages
+		testCompile "org.springframework.boot:spring-boot-starter-test"
+		testCompile "junit:junit:$junitVersion"
+		testRuntime "com.jayway.jsonpath:json-path"
+		testRuntime "org.hsqldb:hsqldb"
+		//runtime
+		runtime "org.hsqldb:hsqldb"
+
+	}
+	// process substitutions in yml files.
+	processResources {
+		filesMatching("**/*.yml") { expand(project.properties) }
+	}
+
+	jar { baseName = 'portfolio' }
+	description = "Micro-service to manage portfolios"
 
 task wrapper(type: Wrapper) { gradleVersion = '2.12' }

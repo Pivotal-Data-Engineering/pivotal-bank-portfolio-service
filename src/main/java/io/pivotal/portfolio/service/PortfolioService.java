@@ -112,7 +112,7 @@ public class PortfolioService {
 			holding.addOrder(order);
 		}
 		List<Quote> quotes = new ArrayList<>();
-		
+
 		if (symbols.size() > 0) {
 			quotes = quoteService.getMultipleQuotes(symbols);
 		}
@@ -159,44 +159,44 @@ public class PortfolioService {
 			logger.debug("Adding Fee to order: " + order);
 		}
 		Transaction transaction = new Transaction();
-		
+
 		if (order.getOrderType().equals(OrderType.BUY)) {
 			double amount = order.getQuantity()
 					* order.getPrice().doubleValue()
 					+ order.getOrderFee().doubleValue();
-			
+
 			transaction.setAccountId(order.getAccountId());
 			transaction.setAmount(BigDecimal.valueOf(amount));
 			transaction.setCurrency(order.getCurrency());
 			transaction.setDate(order.getCompletionDate());
 			transaction.setDescription(order.toString());
 			transaction.setType(TransactionType.DEBIT);
-			
+
 		} else if (order.getOrderType().equals(OrderType.SELL)){
 			double amount = order.getQuantity()
 					* order.getPrice().doubleValue()
 					- order.getOrderFee().doubleValue();
-			
+
 			transaction.setAccountId(order.getAccountId());
 			transaction.setAmount(BigDecimal.valueOf(amount));
 			transaction.setCurrency(order.getCurrency());
 			transaction.setDate(order.getCompletionDate());
 			transaction.setDescription(order.toString());
 			transaction.setType(TransactionType.CREDIT);
-			
+
 		}
-		
+
 		ResponseEntity<String> result = restTemplate.postForEntity("http://"
 				+ accountsService
 				+ "/accounts/transaction",
 				transaction, String.class);
-		
+
 		if (result.getStatusCode() == HttpStatus.OK) {
 			logger.info(String
 					.format("Account funds updated successfully for account: %s and new funds are: %s",
 							order.getAccountId(), result.getBody()));
 			return repository.save(order);
-			
+
 		} else {
 			// TODO: throw exception - not enough funds!
 			// SK - Whats the expected behaviour?

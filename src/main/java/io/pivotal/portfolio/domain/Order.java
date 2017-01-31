@@ -32,18 +32,18 @@ public class Order {
 
 	@Id
 	@org.springframework.data.annotation.Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy = "uuid")
+	@GeneratedValue(generator="uuid2")
+	@GenericGenerator(name="uuid2", strategy = "uuid2")
 	@Column(name = "orderid")
 	private String orderId;
-	
+
 	@Column(name = "userid")
 	@NotNull
 	private String userId;
-	
+
 	@Column(name = "accountid")
 	@NotNull
-	private Integer accountId;
+	private String accountId;
 
 	@Column(name = "symbol", length = 10)
 	@NotNull
@@ -69,7 +69,7 @@ public class Order {
 	@Column(name = "quantity")
 	@NotNull
 	private Integer quantity;
-	
+
 	@Column(name = "currency", length = 3)
 	@NotNull
 	private String currency;
