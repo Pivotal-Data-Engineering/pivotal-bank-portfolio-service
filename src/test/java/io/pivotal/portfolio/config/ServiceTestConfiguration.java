@@ -18,6 +18,7 @@ import io.pivotal.portfolio.domain.Transaction;
 public class ServiceTestConfiguration {
 	
 	public static final Integer ACCOUNT_ID = 500;
+	public static final String ORDER_ID = "8a93db06-09c5-45b1-bfe3-00de754425c4";
 	public static final String USER_ID = "davpin";
 	public static final String SYMBOL = "EMC";
 	public static final Integer QUANTITY = 1000;
@@ -56,7 +57,7 @@ public class ServiceTestConfiguration {
 	
 	public static Order order2() {
 		Order order1 = new Order();
-		order1.setOrderId(1);
+		order1.setOrderId(ORDER_ID);
 		order1.setAccountId(ACCOUNT_ID);
 		order1.setUserId(USER_ID);
 		order1.setCompletionDate(COMPLETION_DATE);
@@ -69,7 +70,7 @@ public class ServiceTestConfiguration {
 	}
 	public static Order sellOrder() {
 		Order order1 = new Order();
-		order1.setOrderId(1);
+		order1.setOrderId(ORDER_ID);
 		order1.setUserId(USER_ID);
 		order1.setAccountId(ACCOUNT_ID);
 		order1.setCompletionDate(COMPLETION_DATE);

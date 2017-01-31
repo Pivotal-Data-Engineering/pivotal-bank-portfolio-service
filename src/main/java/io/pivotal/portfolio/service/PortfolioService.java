@@ -151,7 +151,9 @@ public class PortfolioService {
 	@Transactional
 	public Order addOrder(Order order) {
 		logger.debug("Adding order: " + order);
-		order.setOrderId(idGenerator.getNextId());
+		if(order.getOrderId() == null || "".equals(order.getOrderId())) {
+			order.setOrderId(idGenerator.getNextId());
+		}
 		if (order.getOrderFee() == null) {
 			order.setOrderFee(Order.DEFAULT_ORDER_FEE);
 			logger.debug("Adding Fee to order: " + order);
@@ -202,5 +204,13 @@ public class PortfolioService {
 			return null;
 		}
 
+	}
+
+	public IdGenerator getIdGenerator() {
+		return idGenerator;
+	}
+
+	public void setIdGenerator(IdGenerator idGenerator) {
+		this.idGenerator = idGenerator;
 	}
 }

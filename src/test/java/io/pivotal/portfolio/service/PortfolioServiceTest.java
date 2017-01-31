@@ -13,6 +13,7 @@ import io.pivotal.portfolio.domain.Order;
 import io.pivotal.portfolio.domain.Portfolio;
 import io.pivotal.portfolio.domain.Quote;
 import io.pivotal.portfolio.domain.Transaction;
+import io.pivotal.portfolio.repository.NullIdGenerator;
 import io.pivotal.portfolio.repository.OrderRepository;
 
 import org.junit.Before;
@@ -46,6 +47,8 @@ public class PortfolioServiceTest {
 		MockitoAnnotations.initMocks(this);
 
 	    this.mockMvc = MockMvcBuilders.standaloneSetup(service).build();
+
+	    service.setIdGenerator(new NullIdGenerator());
 	}
 
 	@Test
@@ -60,7 +63,7 @@ public class PortfolioServiceTest {
 	@Test
 	public void doSaveOrder() {
 		Order returnOrder = ServiceTestConfiguration.order();
-		returnOrder.setOrderId(1);
+		returnOrder.setOrderId(ServiceTestConfiguration.ORDER_ID);
 		double amount = ServiceTestConfiguration.order().getQuantity()*ServiceTestConfiguration.order().getPrice().doubleValue()+ServiceTestConfiguration.order().getOrderFee().doubleValue();
 		ResponseEntity<String> response = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		
@@ -75,7 +78,7 @@ public class PortfolioServiceTest {
 	@Test
 	public void doSaveOrderNullOrderFee() {
 		Order returnOrder = ServiceTestConfiguration.order();
-		returnOrder.setOrderId(1);
+		returnOrder.setOrderId(ServiceTestConfiguration.ORDER_ID);
 		double amount = returnOrder.getQuantity()*returnOrder.getPrice().doubleValue()+returnOrder.getOrderFee().doubleValue();
 		ResponseEntity<String> response = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		
@@ -91,7 +94,7 @@ public class PortfolioServiceTest {
 	@Test
 	public void doSaveOrderSellOrder() {
 		Order returnOrder = ServiceTestConfiguration.sellOrder();
-		returnOrder.setOrderId(1);
+		returnOrder.setOrderId(ServiceTestConfiguration.ORDER_ID);
 		double amount = ServiceTestConfiguration.sellOrder().getQuantity()*ServiceTestConfiguration.sellOrder().getPrice().doubleValue()-ServiceTestConfiguration.sellOrder().getOrderFee().doubleValue();
 		ResponseEntity<String> response = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		

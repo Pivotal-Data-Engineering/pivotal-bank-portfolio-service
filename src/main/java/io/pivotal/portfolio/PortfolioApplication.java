@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 public class PortfolioApplication {
 	
 	@Bean
-	public Sampler<?> defaultSampler() {
+	public Sampler defaultSampler() {
 		return new AlwaysSampler();
 	}
 
